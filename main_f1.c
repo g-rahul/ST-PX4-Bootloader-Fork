@@ -134,6 +134,8 @@ board_deinit(void)
 static inline void
 clock_init(void)
 {
+    /* Set the HSEBYP bit */
+	rcc_osc_bypass_enable(RCC_HSE);
 #if defined(INTERFACE_USB)
 	rcc_clock_setup_in_hsi_out_48mhz();
 #else

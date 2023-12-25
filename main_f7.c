@@ -502,6 +502,8 @@ inline void arch_systic_deinit(void)
 static inline void
 clock_init(void)
 {
+    /* Set the HSEBYP bit */
+	rcc_osc_bypass_enable(RCC_HSE);
 	rcc_clock_setup_hse(&clock_setup, OSC_FREQ);
 }
 
