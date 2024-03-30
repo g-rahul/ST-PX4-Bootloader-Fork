@@ -300,11 +300,15 @@ do_jump(uint32_t stacktop, uint32_t entrypoint)
 void
 jump_to_app()
 {
+#ifdef TARGET_HW_PX4_FMU_V5
+	const uint32_t *app_base = (const uint32_t *)APP_RUN_ADDRESS;
+#else
 	const uint32_t *app_base = (const uint32_t *)APP_LOAD_ADDRESS;
+#endif
 	const uint32_t *vec_base = (const uint32_t *)app_base;
 
 	/*
-	 * We refuse to program the first word of the app until the upload is marked
+	 * We refuse to program the first word of the app unrm til the upload is marked
 	 * complete by the host.  So if it's not 0xffffffff, we should try booting it.
 	 */
 	if (app_base[0] == 0xffffffff) {
@@ -382,11 +386,19 @@ jump_to_app()
 	 * The second word of the app is the entrypoint; it must point within the
 	 * flash area (or we have a bad flash).
 	 */
+#ifdef TARGET_HW_PX4_FMU_V5
+	if (app_base[1] < APP_RUN_ADDRESS) {
+#else
 	if (app_base[1] < APP_LOAD_ADDRESS) {
+#endif
 		return;
 	}
 
+#ifdef TARGET_HW_PX4_FMU_V5
+	if (app_base[1] >= (APP_RUN_ADDRESS + board_info.fw_size)) {
+#else
 	if (app_base[1] >= (APP_LOAD_ADDRESS + board_info.fw_size)) {
+#endif
 		return;
 	}
 

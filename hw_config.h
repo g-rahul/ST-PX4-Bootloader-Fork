@@ -335,7 +335,8 @@
  ****************************************************************************/
 
 #elif  defined(TARGET_HW_PX4_FMU_V5)
-
+# define APP_RUN_ADDRESS                0x08008000
+//# define APP_RUN_ADDRESS                0x00208000
 # define APP_LOAD_ADDRESS               0x08008000
 # define BOOTLOADER_DELAY               5000
 # define INTERFACE_USB                  1
